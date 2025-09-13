@@ -30,5 +30,5 @@ fn main() {
     user_model.show_records();
         println!("{:#?}", user_model);
     // user_model.record_handler.find("email".to_string(), "test@example.com".to_string(), &user_model.schema);
-    user_model.record_handler.find_all("email".to_string(), "test@example.com".to_string(), &user_model.schema);
+    user_model.record_handler.find_all("email".to_string(), "test@example.com".to_string());
 }

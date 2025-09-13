@@ -30,12 +30,12 @@ impl Model {
     }
 
     pub fn new(name: String, params: HashMap<String, ColumnField>) -> Self {
-        let model_schema = Model::define_schema(params);
+        let model_schema: ModelSchema = Model::define_schema(params);
 
         Model {
             class_name: name,
-            schema: model_schema,
-            record_handler: RecordHandler { records: Vec::new() },
+            schema: model_schema.clone(),
+            record_handler: RecordHandler { records: Vec::new(), schema: model_schema.clone()},
         }
     }
 
@@ -44,7 +44,7 @@ impl Model {
     }
 
     pub fn create_record(&mut self, data: HashMap<String, String>) {
-        match self.record_handler.validate_record(&self.schema, &data)  {
+        match self.record_handler.validate_record(&data)  {
             Ok(_) => self.record_handler.records.push(data),
             Err(missing) => eprintln!("Error: missing required fields: {:?}", missing),
         }
