@@ -26,13 +26,7 @@ impl RecordHandler {
     }
 
     pub fn find(&self, column: String, value: String) -> Option<&HashMap<String, String>>   {
-        // Function finds a record with a value
-        let column_names: Vec<&String> = self.schema
-            .columns
-            .iter()
-            .map(|column| &column.name) // clone if column.name is String
-            .collect();
-            
+        // Function finds a record with a value         
         let mut result = None;
 
         for record in &self.records{
@@ -44,12 +38,6 @@ impl RecordHandler {
     }
 
     pub fn find_all(&self, column: String, value: String) { 
-        let column_names: Vec<&String> = self.schema
-            .columns
-            .iter()
-            .map(|column| &column.name) // clone if column.name is String
-            .collect();
-        
         let mut result = Vec::new();
 
         for record in &self.records{
@@ -57,27 +45,19 @@ impl RecordHandler {
                 result.push(record);
             }
         }
-
-        println!("{:?}", result);
     }
 
-    // pub fn find_where(&self, params: &HashMap<String, String>) { 
-    //     let column_names: Vec<&String> = &self.schema
-    //         .columns
-    //         .iter()
-    //         .map(|column| &column.name) // clone if column.name is String
-    //         .collect();
-        
-    //     let mut result = Vec::new();
+    pub fn find_where(&self, params: &HashMap<String, String>) {         
+        let mut result = Vec::new();
+        let param_keys: Vec<&String> = params.keys().collect();
 
-    //     for record in &self.records{
-    //         if record.get(&column) == Some(&value){
-    //             result.push(record);
-    //         }
-    //     }
-    //     // result;
-    //     println!("{:?}", result);
-    // }
+        for record in &self.records {
+                if params.iter().all(|(k, v)| record.get(k) == Some(v)) {
+                    result.push(record);
+                }
+        }
+        println!("{:#?}", result);
+    }
 
     pub fn validate_record(&self, field_values: &HashMap<String, String>) -> Result<(), Vec<String>> {
         RecordHandler::validate_schema(&self, field_values)
