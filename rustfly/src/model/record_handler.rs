@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 use crate::model::ModelSchema;
+use crate::model::ColumnField;
 
 #[derive(Debug)]
 pub struct RecordHandler {
@@ -25,12 +26,31 @@ impl RecordHandler {
         }
     }
 
-    pub fn find(&self, column: String, value: String) -> Option<&HashMap<String, String>>   {
+    pub fn validate_fields(&self, field_values: &HashMap<String, String>) -> Result<(), Vec<String>>  {
+        // Function checks for missing fields
+        let unique_columns = self.schema.columns.iter().filter(|c| c.is_unique).collect::<Vec<_>>();
+        let mut non_unique_data = Vec::new();
+
+        for column in unique_columns.iter() {
+            let field_column_value = field_values.get(&column.name).unwrap();
+
+            if self.find(&column.name, field_column_value).is_some() {
+                non_unique_data.push(column.name.clone());
+            }
+        }
+        if non_unique_data.is_empty() {
+            Ok(())
+        } else {
+            Err(non_unique_data)
+        }
+    }
+
+    pub fn find(&self, column: &String, value: &String) -> Option<&HashMap<String, String>>   {
         // Function finds a record with a value         
         let mut result = None;
 
         for record in &self.records{
-            if record.get(&column) == Some(&value){
+            if record.get(column) == Some(&value){
                 result = Some(record)
             }
         }

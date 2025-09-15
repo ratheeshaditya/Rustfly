@@ -24,7 +24,7 @@ fn main() {
 
     let mut record = HashMap::new();
     record.insert("user".to_string(), "123".to_string());
-    record.insert("email".to_string(), "test@example.com".to_string());
+    record.insert("email".to_string(), "test12@example.com".to_string());
     user_model.create_record(record);
 
     // user_model.show_records();
@@ -34,11 +34,17 @@ fn main() {
 
     let mut new_record = HashMap::new();
     new_record.insert("user".to_string(), "123456".to_string());
-    new_record.insert("email".to_string(), "test@example.com".to_string());
+    new_record.insert("email".to_string(), "test233@example.com".to_string());
     user_model.create_record(new_record);
-    
-    user_model.record_handler.find_where(
-        &HashMap::from([("email".to_string(),"test@example.com".to_string())])
-    )
+
+
+    let mut newer_record = HashMap::new();
+    newer_record.insert("user".to_string(), "12345633".to_string());
+    newer_record.insert("email".to_string(), "unique@example.com".to_string());
+    user_model.create_record(newer_record);
+
+    // user_model.record_handler.find_where(
+    //     &HashMap::from([("email".to_string(),"test233@example.com".to_string())])
+    // )
     
 }

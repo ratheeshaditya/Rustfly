@@ -45,7 +45,13 @@ impl Model {
 
     pub fn create_record(&mut self, data: HashMap<String, String>) {
         match self.record_handler.validate_record(&data)  {
-            Ok(_) => self.record_handler.records.push(data),
+            Ok(_) => match self.record_handler.validate_fields(&data) {
+                Ok(_) => {
+                    self.record_handler.records.push(data);
+                    println!("Record added successfully.");
+                }
+                Err(non_unique) => eprintln!("Error: non-unique fields: {:?}", non_unique),
+            },
             Err(missing) => eprintln!("Error: missing required fields: {:?}", missing),
         }
     }
