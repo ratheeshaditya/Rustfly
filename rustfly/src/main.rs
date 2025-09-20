@@ -43,6 +43,7 @@ fn main() {
     newer_record.insert("email".to_string(), "unique@example.com".to_string());
     user_model.create_record(newer_record);
 
+    user_model.show_records();
     // user_model.record_handler.find_where(
     //     &HashMap::from([("email".to_string(),"test233@example.com".to_string())])
     // )

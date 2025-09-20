@@ -14,7 +14,7 @@ impl RecordHandler {
         let mut missing_fields = Vec::new();
 
         for column in &self.schema.columns {
-            if column.is_required && !field_values.contains_key(&column.name) {
+            if column.is_required && !field_values.contains_key(&column.name) && column.name != "id" {
                 missing_fields.push(column.name.clone());
             }
         }
@@ -28,7 +28,7 @@ impl RecordHandler {
 
     pub fn validate_fields(&self, field_values: &HashMap<String, String>) -> Result<(), Vec<String>>  {
         // Function checks for missing fields
-        let unique_columns = self.schema.columns.iter().filter(|c| c.is_unique).collect::<Vec<_>>();
+        let unique_columns = self.schema.columns.iter().filter(|c| c.is_unique && c.name != "id").collect::<Vec<_>>();
         let mut non_unique_data = Vec::new();
 
         for column in unique_columns.iter() {
